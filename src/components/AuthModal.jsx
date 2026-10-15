@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { X, LogIn, UserPlus, Mail, Lock, User as UserIcon } from 'lucide-react'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../hooks/useAuth'
 
 export default function AuthModal() {
   const { isAuthModalOpen, authMode, closeAuthModal, switchMode, login, register } = useAuth()
@@ -8,12 +8,23 @@ export default function AuthModal() {
   const [form, setForm] = useState({ name: '', email: '', password: '' })
   const [error, setError] = useState('')
 
-  // Focus en el primer input al abrir
+  // IA: setState dentro de useEffect causa renders en cascada
+  // Solución manual: detectamos la transición cerrado → abierto durante el render
+  // y reseteamos el formulario solo cuando corresponde.
+  const [wasOpen, setWasOpen] = useState(isAuthModalOpen)
+
+  if (isAuthModalOpen !== wasOpen) {
+    setWasOpen(isAuthModalOpen)
+    if (isAuthModalOpen) {
+      setForm({ name: '', email: '', password: '' })
+      setError('')
+    }
+  }
+
+  // Focus en el botón de cerrar cuando se abre el modal
   useEffect(() => {
     if (isAuthModalOpen) {
       closeRef.current?.focus()
-      setForm({ name: '', email: '', password: '' })
-      setError('')
     }
   }, [isAuthModalOpen, authMode])
 
@@ -105,7 +116,9 @@ export default function AuthModal() {
               placeholder="Contraseña (mín. 6 caracteres)"
               value={form.password}
               onChange={handleChange}
-              autoComplete={authMode === 'login' ? 'current-password' : 'new-password'}
+              autoComplete={
+                authMode === 'login' ? 'current-password' : 'new-password'
+              }
             />
           </div>
 

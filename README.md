@@ -1,8 +1,8 @@
 # 🎮 GameVault — DAW Semana 07
 
-**Tienda de videojuegos SPA** desarrollada con **React + Vite** como práctica de laboratorio para la **Semana 07** del curso **Desarrollo de Aplicaciones Web**.
+**SPA + Dashboard de Gestión con Estado Complejo** desarrollada con **React + Vite** para la práctica de laboratorio de la **Semana 07** del curso **Desarrollo de Aplicaciones Web**.
 
-El proyecto implementa de forma profesional los **8 hooks principales de React** (useState, useEffect, useContext, useRef, useReducer, useCallback, useMemo y Hooks Personalizados), aplicados a funcionalidades reales de un e-commerce.
+El proyecto implementa de forma profesional los **8 hooks principales de React** aplicados a funcionalidades reales de un e-commerce y un gestor de tareas con estado complejo.
 
 ---
 
@@ -17,144 +17,67 @@ El proyecto implementa de forma profesional los **8 hooks principales de React**
 
 ---
 
-## 🎯 Objetivo de la práctica
+## 🎯 Objetivo
 
-Desarrollar una **Single Page Application (SPA)** funcional que demuestre el dominio de los React Hooks mediante una tienda de videojuegos realista, aplicando buenas prácticas de arquitectura, optimización de render y persistencia de datos.
+Desarrollar una **SPA completa** que demuestre el dominio de los React Hooks mediante:
+1. Una tienda de videojuegos (Parte 1).
+2. Un **Dashboard de Gestión con estado complejo** (Parte 2).
+3. Validación con **React Profiler** y **ESLint**.
 
 ---
 
-## 🚀 Tecnologías utilizadas
+## 🚀 Tecnologías
 
 - ⚛️ **React 18** + **Vite**
-- 🎨 **CSS puro** con variables y temas dinámicos
-- 🎯 **Lucide React** para iconografía
-- 🌐 **FreeToGame API** para catálogo de juegos
-- 💾 **localStorage** para persistencia de sesión, carrito y preferencias
-- 🛠️ **Git + GitHub** para control de versiones
+- 🎨 **CSS puro** con variables y temas
+- 🎯 **Lucide React** para iconos
+- 🌐 **FreeToGame API** para el catálogo
+- 💾 **localStorage** para persistencia
+- 🛠️ **Git + GitHub**
 
 ---
 
-## 📚 Hooks implementados y su justificación
+## 📚 Justificación técnica de cada hook
 
-| Hook | Ubicación | Justificación real en el proyecto |
+| Hook | ¿Dónde? | ¿Por qué NO `useState` simple? |
 |---|---|---|
-| **`useState`** | Todo el proyecto | Estado local: búsqueda, filtros, modales, formularios |
-| **`useEffect`** | `useFetch`, `ThemeContext`, `useDebounce`, modales | Fetch de API, sincronización con localStorage, listeners de teclado, limpieza |
-| **`useContext`** | `ThemeContext`, `CartContext`, `WishlistContext`, `AuthContext` | Evitar prop drilling en más de 10 componentes |
-| **`useRef`** | `SearchBar`, `AuthModal`, `UserMenu` | Focus de inputs, atajos de teclado, detección de click fuera |
-| **`useReducer`** | `cartReducer`, `wishlistReducer`, `authReducer` | Estado complejo con múltiples acciones tipadas |
-| **`useCallback`** | `CartContext`, `WishlistContext`, `AuthContext`, `GameGrid` | Estabilizar funciones pasadas a componentes `memo` |
-| **`useMemo`** | `GameGrid` | Filtrado + ordenamiento pesado del catálogo |
-| **Custom Hooks** | `useFetch`, `useDebounce`, `useLocalStorage` | Encapsular lógica reutilizable |
-| **`React.memo`** | `GameCard`, `Filters` | Evitar re-renders innecesarios |
-| **`Profiler`** | `ProfilerWrapper` | Medir performance en desarrollo |
-| **`StrictMode`** | `main.jsx` | Detectar efectos dobles y bugs en dev |
+| **`useState`** | Formularios, búsqueda, modales | Estado simple y local |
+| **`useReducer`** | Carrito, wishlist, auth, tareas | Hay **múltiples acciones** sobre listas (add/remove/filter/sort). Con `useState` habría múltiples setters y la lógica quedaría dispersa. |
+| **`useContext`** | Tema, carrito, wishlist, auth, tareas | El estado se consume en **más de 10 componentes**. Con `useState` habría **prop drilling masivo**. |
+| **`useEffect`** | Fetch, localStorage, listeners | Necesitamos sincronizar con **sistemas externos** (API, storage, DOM) y **limpiar** al desmontar. |
+| **`useMemo`** | `GameGrid`, `Dashboard` | Filtrado + ordenamiento sobre listas grandes. Recalcular en cada render es costoso. |
+| **`useCallback`** | Contextos, `GameGrid`, `Dashboard` | Los handlers se pasan a componentes `memo`. Sin estabilizar, se rompe la memoización. |
+| **`useRef`** | `SearchBar`, `Dashboard`, `UserMenu` | El foco o los valores mutables **no deben disparar re-render**. `useState` no es adecuado. |
+| **Custom Hooks** | `useFetch`, `useDebounce`, `useLocalStorage` | Lógica reutilizable en múltiples componentes. Evita duplicación de código. |
 
 ---
 
-## ✨ Funcionalidades de la aplicación
+## 🔄 Diagrama de flujo del estado
 
-### 🏠 Catálogo
-- Catálogo de más de 40 videojuegos obtenidos desde API pública.
-- **Búsqueda en tiempo real** con debounce (300ms) para optimizar renders.
-- **Filtros por género** (Shooter, MMO, MOBA, Battle Royale, Strategy, Racing, Sports).
-- **Ordenamiento** por relevancia, precio (asc/desc) y título.
-- Secciones dedicadas: **Catálogo**, **Ofertas** y **Novedades**.
-- Badges visuales: 🔥 **-30%** en ofertas y ✨ **Nuevo** en lanzamientos.
-
-### 🎨 Tema claro / oscuro
-- Cambio de tema global mediante `useContext`.
-- Persistencia en `localStorage` (mantiene la preferencia al recargar).
-- Sincronización automática con el atributo `data-theme` del DOM.
-
-### 🛒 Carrito de compras
-- Añadir, eliminar y modificar cantidades de productos.
-- Cálculo automático del total.
-- Persistencia completa en `localStorage`.
-- Panel lateral animado con cierre por click externo o tecla `Escape`.
-
-### ❤️ Lista de deseos (Wishlist)
-- Añadir o quitar juegos favoritos.
-- Mover productos de la wishlist directamente al carrito.
-- Panel lateral independiente con contador en el header.
-
-### 👤 Autenticación de usuarios
-- **Registro** e **Inicio de sesión** mediante modal.
-- Validación de campos (email, contraseña mínima de 6 caracteres, nombre en registro).
-- Sesión persistente con `localStorage`.
-- **Menú de usuario** con avatar, nombre, email, "Mis pedidos" y "Cerrar sesión".
-
-### 💳 Checkout protegido
-- Solo usuarios autenticados pueden finalizar la compra.
-- Si no hay sesión, se abre el modal de login automáticamente.
-- **Modal de confirmación** con número de orden, resumen de artículos y total pagado.
-- Carrito vaciado tras la compra.
-
----
-
-## 📂 Estructura del proyecto
-daw-semana07/
-├── public/
-├── src/
-│ ├── components/
-│ │ ├── Header.jsx # Navbar con tema, wishlist, carrito y sesión
-│ │ ├── Hero.jsx # Sección principal del catálogo
-│ │ ├── SearchBar.jsx # Buscador con useRef y Ctrl+K
-│ │ ├── Filters.jsx # Filtros por género y orden (memo)
-│ │ ├── GameGrid.jsx # Catálogo con useMemo + useCallback
-│ │ ├── GameCard.jsx # Tarjeta de juego (memo) con badges
-│ │ ├── GameModal.jsx # Modal de detalle del juego
-│ │ ├── Cart.jsx # Panel lateral del carrito
-│ │ ├── Wishlist.jsx # Panel lateral de favoritos
-│ │ ├── AuthModal.jsx # Modal de login / registro
-│ │ ├── UserMenu.jsx # Menú desplegable del usuario
-│ │ ├── CheckoutModal.jsx # Confirmación de compra
-│ │ ├── ProfilerWrapper.jsx # Wrapper para React Profiler
-│ │ └── Footer.jsx # Pie de página
-│ ├── context/
-│ │ ├── ThemeContext.jsx # Tema claro/oscuro global
-│ │ ├── CartContext.jsx # Estado del carrito
-│ │ ├── WishlistContext.jsx # Estado de la wishlist
-│ │ └── AuthContext.jsx # Autenticación de usuarios
-│ ├── hooks/
-│ │ ├── useFetch.js # Custom Hook para peticiones HTTP
-│ │ ├── useDebounce.js # Custom Hook para debounce
-│ │ └── useLocalStorage.js # Custom Hook para persistencia
-│ ├── reducers/
-│ │ ├── cartReducer.js # Reducer del carrito
-│ │ ├── wishlistReducer.js # Reducer de la wishlist
-│ │ └── authReducer.js # Reducer de autenticación
-│ ├── App.jsx # Componente raíz
-│ ├── main.jsx # Punto de entrada con StrictMode
-│ └── index.css # Estilos globales con variables
-├── index.html
-├── package.json
-└── vite.config.js
-
-
----
-
-## 🛠️ Instalación y ejecución
-
-### Prerrequisitos
-- **Node.js** ≥ 20.x
-- **npm** o **pnpm**
-- Navegador moderno (Chrome, Firefox, Edge)
-
-### Pasos
-
-```bash
-# 1. Clonar el repositorio
-git clone https://github.com/THEDEMONS101/DAW-SEMANA07.git
-
-# 2. Entrar al proyecto
-cd DAW-SEMANA07/daw-semana07
-
-# 3. Instalar dependencias
-npm install
-
-# 4. Instalar lucide-react (iconos)
-npm install lucide-react
-
-# 5. Levantar el servidor de desarrollo
-npm run dev
+```mermaid
+flowchart TD
+    A[Usuario interactúa] --> B{¿Qué acción?}
+    B -->|Añadir juego| C[CartContext dispatch ADD]
+    B -->|Cambiar tema| D[ThemeContext toggle]
+    B -->|Login/Registro| E[AuthContext dispatch]
+    B -->|Buscar juego| F[useState searchTerm]
+    B -->|Añadir tarea| G[TasksContext dispatch ADD]
+    B -->|Filtrar tarea| H[TasksContext dispatch FILTER]
+    
+    C --> I[cartReducer]
+    E --> J[authReducer]
+    G --> K[tasksReducer]
+    H --> K
+    
+    F --> L[useDebounce]
+    L --> M[useMemo filteredGames]
+    
+    I --> N[useEffect → localStorage]
+    J --> N
+    K --> N
+    D --> N
+    
+    N --> O[Re-render componentes suscritos]
+    M --> O
+    
+    O --> P[React Profiler mide commits]

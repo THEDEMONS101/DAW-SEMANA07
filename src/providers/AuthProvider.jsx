@@ -1,11 +1,9 @@
-import { createContext, useContext, useReducer, useCallback, useEffect } from 'react'
+import { useReducer, useCallback, useEffect } from 'react'
+import { AuthContext } from '../contexts/AuthContext'
 import { authReducer, authInitialState, AUTH_ACTIONS } from '../reducers/authReducer'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 
-const AuthContext = createContext()
-
 export function AuthProvider({ children }) {
-  // Persistimos solo el usuario, no el estado de UI
   const [persistedUser, setPersistedUser] = useLocalStorage('gv-user', null)
 
   const [state, dispatch] = useReducer(authReducer, {
@@ -13,33 +11,21 @@ export function AuthProvider({ children }) {
     user: persistedUser,
   })
 
-  // Sincroniza usuario con localStorage
   useEffect(() => {
     setPersistedUser(state.user)
   }, [state.user, setPersistedUser])
 
-  // IA: Funciones recreadas en cada render → hijos re-renderizan
-  // Solución manual: useCallback estabiliza handlers de auth
   const login = useCallback((user) => {
-    // Simulación de login: guardamos datos del formulario
     dispatch({
       type: AUTH_ACTIONS.LOGIN,
-      payload: {
-        id: Date.now(),
-        name: user.name,
-        email: user.email,
-      },
+      payload: { id: Date.now(), name: user.name, email: user.email },
     })
   }, [])
 
   const register = useCallback((user) => {
     dispatch({
       type: AUTH_ACTIONS.REGISTER,
-      payload: {
-        id: Date.now(),
-        name: user.name,
-        email: user.email,
-      },
+      payload: { id: Date.now(), name: user.name, email: user.email },
     })
   }, [])
 
@@ -77,10 +63,4 @@ export function AuthProvider({ children }) {
       {children}
     </AuthContext.Provider>
   )
-}
-
-export function useAuth() {
-  const ctx = useContext(AuthContext)
-  if (!ctx) throw new Error('useAuth debe usarse dentro de AuthProvider')
-  return ctx
 }

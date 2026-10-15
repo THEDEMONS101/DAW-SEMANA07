@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import { CheckCircle2, X } from 'lucide-react'
-import { useCart } from '../context/CartContext'
 
 export default function CheckoutModal({ orderNumber, total, items, onClose }) {
   useEffect(() => {

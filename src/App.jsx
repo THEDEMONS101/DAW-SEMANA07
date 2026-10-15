@@ -1,8 +1,10 @@
 import { useState, useCallback } from 'react'
-import { ThemeProvider } from './context/ThemeContext'
-import { CartProvider, useCart } from './context/CartContext'
-import { WishlistProvider } from './context/WishlistContext'
-import { AuthProvider } from './context/AuthContext'
+import { ThemeProvider } from './providers/ThemeProvider'
+import { CartProvider } from './providers/CartProvider'
+import { AuthProvider } from './providers/AuthProvider'
+import { WishlistProvider } from './providers/WishlistProvider'
+import { TasksProvider } from './providers/TasksProvider'
+import { useCart } from './hooks/useCart'
 import Header from './components/Header'
 import Hero from './components/Hero'
 import SearchBar from './components/SearchBar'
@@ -15,6 +17,7 @@ import Footer from './components/Footer'
 import ProfilerWrapper from './components/ProfilerWrapper'
 import AuthModal from './components/AuthModal'
 import CheckoutModal from './components/CheckoutModal'
+import Dashboard from './components/Dashboard'
 
 function AppContent() {
   const [searchTerm, setSearchTerm] = useState('')
@@ -29,7 +32,11 @@ function AppContent() {
   const handleCloseModal = useCallback(() => setSelectedGame(null), [])
 
   const sectionFilter =
-    section === 'ofertas' ? 'price-asc' : section === 'novedades' ? 'default' : sort
+    section === 'ofertas'
+      ? 'price-asc'
+      : section === 'novedades'
+      ? 'default'
+      : sort
 
   return (
     <>
@@ -43,7 +50,12 @@ function AppContent() {
             <div className="toolbar">
               <SearchBar value={searchTerm} onChange={setSearchTerm} />
             </div>
-            <Filters genre={genre} setGenre={setGenre} sort={sort} setSort={setSort} />
+            <Filters
+              genre={genre}
+              setGenre={setGenre}
+              sort={sort}
+              setSort={setSort}
+            />
           </>
         )}
 
@@ -61,15 +73,23 @@ function AppContent() {
           </div>
         )}
 
-        <ProfilerWrapper id="GameGrid">
-          <GameGrid
-            searchTerm={searchTerm}
-            genre={genre}
-            sort={sectionFilter}
-            section={section}
-            onView={handleView}
-          />
-        </ProfilerWrapper>
+        {section === 'dashboard' && (
+          <ProfilerWrapper id="Dashboard">
+            <Dashboard />
+          </ProfilerWrapper>
+        )}
+
+        {section !== 'dashboard' && (
+          <ProfilerWrapper id="GameGrid">
+            <GameGrid
+              searchTerm={searchTerm}
+              genre={genre}
+              sort={sectionFilter}
+              section={section}
+              onView={handleView}
+            />
+          </ProfilerWrapper>
+        )}
       </main>
 
       <Footer />
@@ -98,7 +118,9 @@ export default function App() {
       <AuthProvider>
         <CartProvider>
           <WishlistProvider>
-            <AppContent />
+            <TasksProvider>
+              <AppContent />
+            </TasksProvider>
           </WishlistProvider>
         </CartProvider>
       </AuthProvider>

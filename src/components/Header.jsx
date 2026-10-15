@@ -1,8 +1,8 @@
 import { Gamepad2, ShoppingCart, Heart, Sun, Moon, LogIn } from 'lucide-react'
-import { useTheme } from '../context/ThemeContext'
-import { useCart } from '../context/CartContext'
-import { useWishlist } from '../context/WishlistContext'
-import { useAuth } from '../context/AuthContext'
+import { useTheme } from '../hooks/useTheme'
+import { useCart } from '../hooks/useCart'
+import { useWishlist } from '../hooks/useWishlist'
+import { useAuth } from '../hooks/useAuth'
 import UserMenu from './UserMenu'
 
 export default function Header({ section, setSection }) {
@@ -15,6 +15,7 @@ export default function Header({ section, setSection }) {
     { id: 'catalog', label: 'Catálogo' },
     { id: 'ofertas', label: 'Ofertas' },
     { id: 'novedades', label: 'Novedades' },
+    { id: 'dashboard', label: 'Dashboard' }, // 👈 NUEVO
   ]
 
   return (

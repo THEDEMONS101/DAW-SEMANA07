@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { Plus, Heart, Eye } from 'lucide-react'
-import { useWishlist } from '../context/WishlistContext'
+import { useWishlist } from '../hooks/useWishlist'
 
 const GameCard = memo(function GameCard({ game, onAdd, onView }) {
   const { toggleItem, isInWishlist } = useWishlist()

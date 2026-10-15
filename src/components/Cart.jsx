@@ -1,6 +1,6 @@
 import { X, Trash2, Plus, Minus } from 'lucide-react'
-import { useCart } from '../context/CartContext'
-import { useAuth } from '../context/AuthContext'
+import { useCart } from '../hooks/useCart'
+import { useAuth } from '../hooks/useAuth'
 
 export default function Cart() {
   const {

@@ -1,9 +1,6 @@
-import { createContext, useContext, useEffect } from 'react'
+import { useEffect } from 'react'
+import { ThemeContext } from '../contexts/ThemeContext'
 import { useLocalStorage } from '../hooks/useLocalStorage'
-
-// IA: Tema usado en 6 componentes → prop drilling masivo
-// Solución manual: Context + useLocalStorage para persistencia
-const ThemeContext = createContext()
 
 export function ThemeProvider({ children }) {
   const [theme, setTheme] = useLocalStorage('gv-theme', 'dark')
@@ -20,10 +17,4 @@ export function ThemeProvider({ children }) {
       {children}
     </ThemeContext.Provider>
   )
-}
-
-export function useTheme() {
-  const ctx = useContext(ThemeContext)
-  if (!ctx) throw new Error('useTheme debe usarse dentro de ThemeProvider')
-  return ctx
 }

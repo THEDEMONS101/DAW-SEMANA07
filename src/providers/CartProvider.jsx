@@ -1,15 +1,12 @@
-import { createContext, useContext, useReducer, useCallback, useEffect, useState } from 'react'
+import { useReducer, useCallback, useEffect, useState } from 'react'
+import { CartContext } from '../contexts/CartContext'
 import { cartReducer, cartInitialState, CART_ACTIONS } from '../reducers/cartReducer'
 import { useLocalStorage } from '../hooks/useLocalStorage'
-
-const CartContext = createContext()
 
 export function CartProvider({ children }) {
   const [persisted, setPersisted] = useLocalStorage('gv-cart', cartInitialState)
   const [state, dispatch] = useReducer(cartReducer, persisted)
-
-  // Estado del checkout
-  const [checkout, setCheckout] = useState(null) // { orderNumber, total, items } | null
+  const [checkout, setCheckout] = useState(null)
 
   useEffect(() => {
     setPersisted(state)
@@ -39,10 +36,6 @@ export function CartProvider({ children }) {
     dispatch({ type: CART_ACTIONS.TOGGLE })
   }, [])
 
-  const total = state.items.reduce((a, i) => a + i.price * i.quantity, 0)
-  const totalItems = state.items.reduce((a, i) => a + i.quantity, 0)
-
-  // Simula el proceso de checkout
   const confirmCheckout = useCallback(() => {
     if (state.items.length === 0) return
     const orderNumber = Math.floor(100000 + Math.random() * 900000)
@@ -52,10 +45,13 @@ export function CartProvider({ children }) {
       items: state.items,
     })
     dispatch({ type: CART_ACTIONS.CLEAR })
-    dispatch({ type: CART_ACTIONS.TOGGLE }) // cierra el panel
+    dispatch({ type: CART_ACTIONS.TOGGLE })
   }, [state.items])
 
   const closeCheckout = useCallback(() => setCheckout(null), [])
+
+  const total = state.items.reduce((a, i) => a + i.price * i.quantity, 0)
+  const totalItems = state.items.reduce((a, i) => a + i.quantity, 0)
 
   return (
     <CartContext.Provider
@@ -78,10 +74,4 @@ export function CartProvider({ children }) {
       {children}
     </CartContext.Provider>
   )
-}
-
-export function useCart() {
-  const ctx = useContext(CartContext)
-  if (!ctx) throw new Error('useCart debe usarse dentro de CartProvider')
-  return ctx
 }

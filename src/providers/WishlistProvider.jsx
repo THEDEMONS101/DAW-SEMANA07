@@ -1,7 +1,6 @@
-import { createContext, useContext, useReducer, useCallback } from 'react'
+import { useReducer, useCallback } from 'react'
+import { WishlistContext } from '../contexts/WishlistContext'
 import { wishlistReducer, wishlistInitialState, WISHLIST_ACTIONS } from '../reducers/wishlistReducer'
-
-const WishlistContext = createContext()
 
 export function WishlistProvider({ children }) {
   const [state, dispatch] = useReducer(wishlistReducer, wishlistInitialState)
@@ -43,10 +42,4 @@ export function WishlistProvider({ children }) {
       {children}
     </WishlistContext.Provider>
   )
-}
-
-export function useWishlist() {
-  const ctx = useContext(WishlistContext)
-  if (!ctx) throw new Error('useWishlist debe usarse dentro de WishlistProvider')
-  return ctx
 }

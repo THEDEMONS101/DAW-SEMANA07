@@ -1312,3 +1312,231 @@ img {
     flex: 1;
   }
 }
+/* ============================================================
+   DASHBOARD DE TAREAS
+   ============================================================ */
+.dashboard {
+  max-width: 820px;
+  margin: 0 auto;
+}
+
+.dashboard__header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.dashboard__icon {
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+}
+
+.dashboard__header h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, var(--accent), var(--success));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.dashboard__header p {
+  color: var(--text-dim);
+  font-size: 0.95rem;
+}
+
+/* ===== FORM ===== */
+.dashboard__form {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.dashboard__input {
+  flex: 1;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  color: var(--text);
+  font-size: 1rem;
+  outline: none;
+  transition: 0.2s;
+}
+
+.dashboard__input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+/* ===== STATS ===== */
+.dashboard__stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.stat-card {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem;
+  text-align: center;
+  transition: 0.2s;
+}
+
+.stat-card:hover {
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
+  transform: translateY(-2px);
+}
+
+.stat-card__value {
+  display: block;
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 0.35rem;
+}
+
+.stat-card__label {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+}
+
+/* ===== TOOLBAR ===== */
+.dashboard__toolbar {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.dashboard__filters {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.dashboard__actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.dashboard__actions select {
+  background: var(--bg-soft);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.5rem 0.9rem;
+  font-size: 0.9rem;
+  outline: none;
+  cursor: pointer;
+}
+
+.dashboard__actions .btn {
+  flex: 0 0 auto;
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+}
+
+/* ===== LISTA ===== */
+.dashboard__list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.9rem 1rem;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  transition: 0.2s;
+  animation: fadeIn 0.2s ease;
+}
+
+.task-item:hover {
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
+}
+
+.task-item--done {
+  opacity: 0.65;
+}
+
+.task-item--done .task-item__title {
+  text-decoration: line-through;
+  color: var(--text-dim);
+}
+
+.task-item__toggle {
+  color: var(--text-dim);
+  display: grid;
+  place-items: center;
+  transition: 0.2s;
+  flex-shrink: 0;
+}
+
+.task-item--done .task-item__toggle {
+  color: var(--success);
+}
+
+.task-item__toggle:hover {
+  color: var(--accent);
+  transform: scale(1.1);
+}
+
+.task-item__title {
+  flex: 1;
+  font-size: 0.95rem;
+  word-break: break-word;
+}
+
+.task-item__remove {
+  color: var(--text-dim);
+  transition: 0.2s;
+  flex-shrink: 0;
+}
+
+.task-item__remove:hover {
+  color: var(--danger);
+  transform: scale(1.1);
+}
+
+.dashboard__empty {
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-dim);
+  background: var(--bg-elev);
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 640px) {
+  .dashboard__stats {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard__form {
+    flex-direction: column;
+  }
+
+  .dashboard__toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .dashboard__actions {
+    justify-content: space-between;
+  }
+}

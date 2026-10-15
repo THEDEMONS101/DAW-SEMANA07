@@ -1,10 +1,10 @@
 import { X, ShoppingCart, Trash2 } from 'lucide-react'
-import { useWishlist } from '../context/WishlistContext'
-import { useCart } from '../context/CartContext'
+import { useWishlist } from '../hooks/useWishlist'
+import { useCart } from '../hooks/useCart'
 
 export default function Wishlist() {
   const { items, isOpen, togglePanel, removeItem, clearWishlist } = useWishlist()
-  const { addItem, toggleCart } = useCart()
+  const { addItem } = useCart()
 
   if (!isOpen) return null
 

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import { User, LogOut, Package } from 'lucide-react'
-import { useAuth } from '../context/AuthContext'
+import { LogOut, Package } from 'lucide-react'
+import { useAuth } from '../hooks/useAuth'
 
 export default function UserMenu() {
   const { user, logout } = useAuth()

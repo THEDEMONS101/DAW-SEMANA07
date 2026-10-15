@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { X, Plus, Heart } from 'lucide-react'
-import { useCart } from '../context/CartContext'
-import { useWishlist } from '../context/WishlistContext'
+import { useCart } from '../hooks/useCart'
+import { useWishlist } from '../hooks/useWishlist'
 
 export default function GameModal({ game, onClose }) {
   const closeRef = useRef(null)

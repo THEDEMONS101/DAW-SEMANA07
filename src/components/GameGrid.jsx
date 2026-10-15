@@ -1,7 +1,7 @@
 import { useMemo, useCallback } from 'react'
 import GameCard from './GameCard'
 import { useFetch } from '../hooks/useFetch'
-import { useCart } from '../context/CartContext'
+import { useCart } from '../hooks/useCart'
 import { useDebounce } from '../hooks/useDebounce'
 
 const API_URL = 'https://www.freetogame.com/api/games'
